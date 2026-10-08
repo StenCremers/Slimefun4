@@ -28,16 +28,21 @@ class TestMinecraftVersion {
 
         Assertions.assertTrue(MinecraftVersion.MINECRAFT_1_20.isMinecraftVersion(20, 4));
         Assertions.assertTrue(MinecraftVersion.MINECRAFT_1_20_5.isMinecraftVersion(20, 6));
+        Assertions.assertTrue(MinecraftVersion.MINECRAFT_26_2.isMinecraftVersion(26, 2));
+        Assertions.assertTrue(MinecraftVersion.MINECRAFT_1_21.isMinecraftVersion(21, 11));
 
         Assertions.assertFalse(MinecraftVersion.MINECRAFT_1_20.isMinecraftVersion(20, 5));
         Assertions.assertFalse(MinecraftVersion.MINECRAFT_1_16.isMinecraftVersion(17, 1));
         Assertions.assertFalse(MinecraftVersion.MINECRAFT_1_20_5.isMinecraftVersion(20, 4));
+        Assertions.assertFalse(MinecraftVersion.MINECRAFT_26_2.isMinecraftVersion(26, 1));
+        Assertions.assertFalse(MinecraftVersion.MINECRAFT_1_21.isMinecraftVersion(26, 2));
     }
 
     @Test
     @DisplayName("Test if Minecraft versions are ordered correctly (#atLeast)")
     void testAtLeast() {
         Assertions.assertTrue(MinecraftVersion.MINECRAFT_1_18.isAtLeast(MinecraftVersion.MINECRAFT_1_16));
+        Assertions.assertTrue(MinecraftVersion.MINECRAFT_26_2.isAtLeast(MinecraftVersion.MINECRAFT_1_21));
         Assertions.assertTrue(MinecraftVersion.MINECRAFT_1_17.isAtLeast(MinecraftVersion.MINECRAFT_1_16));
         Assertions.assertTrue(MinecraftVersion.MINECRAFT_1_17.isAtLeast(MinecraftVersion.MINECRAFT_1_17));
         Assertions.assertTrue(MinecraftVersion.MINECRAFT_1_20.isAtLeast(MinecraftVersion.MINECRAFT_1_20));

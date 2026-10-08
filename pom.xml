@@ -24,12 +24,12 @@
         <!-- Target Java 16 -->
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
-        <!-- Run tests using java 21 -->
-        <maven.compiler.testSource>21</maven.compiler.testSource>
-        <maven.compiler.testTarget>21</maven.compiler.testTarget>
+        <!-- Run tests using java 25 -->
+        <maven.compiler.testSource>25</maven.compiler.testSource>
+        <maven.compiler.testTarget>25</maven.compiler.testTarget>
 
         <!-- Spigot properties -->
-        <paper.version>1.21.1</paper.version>
+        <paper.version>26.2.build.132-stable</paper.version>
         <paper.javadocs>https://hub.spigotmc.org/javadocs/spigot/</paper.javadocs>
 
         <!-- Default settings for sonarcloud.io -->
@@ -168,7 +168,7 @@
                 <!-- Code Coverage Reports -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
+                <version>0.8.15</version>
 
                 <executions>
                     <execution>
@@ -219,6 +219,18 @@
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>META-INF/*</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <!-- Slimefun bundles patched versions of these (GameProfile is final since 1.21.9, -->
+                            <!-- and 26.x version strings are not understood by MinecraftVersion) -->
+                            <artifact>com.github.Slimefun.dough:dough-api</artifact>
+                            <excludes>
+                                <exclude>io/github/bakedlibs/dough/skins/CustomGameProfile*.class</exclude>
+                                <exclude>io/github/bakedlibs/dough/skins/PlayerSkin*.class</exclude>
+                                <exclude>io/github/bakedlibs/dough/skins/PlayerHead*.class</exclude>
+                                <exclude>io/github/bakedlibs/dough/skins/nms/**</exclude>
+                                <exclude>io/github/bakedlibs/dough/versions/MinecraftVersion.class</exclude>
                             </excludes>
                         </filter>
                     </filters>
@@ -337,7 +349,7 @@
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>5.11.4</version>
+                <version>6.1.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -378,7 +390,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>${paper.version}-R0.1-SNAPSHOT</version>
+            <version>${paper.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -391,7 +403,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.15.2</version>
+            <version>5.24.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -402,9 +414,9 @@
         </dependency>
         <!-- This needs to be before Spigot because MockBukkit will fail otherwise. -->
         <dependency>
-            <groupId>com.github.seeseemelk</groupId>
-            <artifactId>MockBukkit-v1.21</artifactId>
-            <version>3.133.2</version>
+            <groupId>org.mockbukkit.mockbukkit</groupId>
+            <artifactId>mockbukkit-v26.2</artifactId>
+            <version>4.117.0</version>
             <scope>test</scope>
 
             <exclusions>
