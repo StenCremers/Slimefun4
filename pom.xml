@@ -221,6 +221,16 @@
                                 <exclude>META-INF/*</exclude>
                             </excludes>
                         </filter>
+                        <filter>
+                            <!-- Slimefun bundles patched versions of these (GameProfile is final since 1.21.9) -->
+                            <artifact>com.github.Slimefun.dough:dough-api</artifact>
+                            <excludes>
+                                <exclude>io/github/bakedlibs/dough/skins/CustomGameProfile*.class</exclude>
+                                <exclude>io/github/bakedlibs/dough/skins/PlayerSkin*.class</exclude>
+                                <exclude>io/github/bakedlibs/dough/skins/PlayerHead*.class</exclude>
+                                <exclude>io/github/bakedlibs/dough/skins/nms/**</exclude>
+                            </excludes>
+                        </filter>
                     </filters>
                 </configuration>
 
