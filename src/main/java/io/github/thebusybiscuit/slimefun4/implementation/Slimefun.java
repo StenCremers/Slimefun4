@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -154,6 +156,12 @@ public class Slimefun extends JavaPlugin implements SlimefunAddon {
      * Make sure to clean this up in {@link #onDisable()}!
      */
     private static Slimefun instance;
+
+    /**
+     * Matches the Minecraft version in {@link Bukkit#getVersion()}, e.g. "(MC: 1.21.11)" or "(MC: 26.2)".
+     * PaperLib only understands the legacy "1.x" format, so we parse it ourselves.
+     */
+    private static final Pattern MINECRAFT_VERSION_PATTERN = Pattern.compile("\\(MC: (?:1\\.)?(\\d+)(?:\\.(\\d+))?");
 
     /**
      * Keep track of which {@link MinecraftVersion} we are on.
@@ -524,10 +532,12 @@ public class Slimefun extends JavaPlugin implements SlimefunAddon {
             }
 
             // Now check the actual Version of Minecraft
-            int version = PaperLib.getMinecraftVersion();
-            int patchVersion = PaperLib.getMinecraftPatchVersion();
+            Matcher matcher = MINECRAFT_VERSION_PATTERN.matcher(Bukkit.getVersion());
 
-            if (version > 0) {
+            if (matcher.find()) {
+                int version = Integer.parseInt(matcher.group(1));
+                int patchVersion = matcher.group(2) == null ? 0 : Integer.parseInt(matcher.group(2));
+
                 // Check all supported versions of Minecraft
                 for (MinecraftVersion supportedVersion : MinecraftVersion.values()) {
                     if (supportedVersion.isMinecraftVersion(version, patchVersion)) {
@@ -537,7 +547,8 @@ public class Slimefun extends JavaPlugin implements SlimefunAddon {
                 }
 
                 // Looks like you are using an unsupported Minecraft Version
-                StartupWarnings.invalidMinecraftVersion(getLogger(), version, getDescription().getVersion());
+                String versionName = version >= 26 ? version + "." + patchVersion : "1." + version + ".x";
+                StartupWarnings.invalidMinecraftVersion(getLogger(), versionName, getDescription().getVersion());
                 return true;
             } else {
                 getLogger().log(Level.WARNING, "We could not determine the version of Minecraft you were using? ({0})", Bukkit.getVersion());
